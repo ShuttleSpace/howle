@@ -14,78 +14,68 @@ import 'package:web/web.dart';
 extension type SpatialPosition._(JSArray<JSNumber> _)
     implements JSArray<JSNumber> {
   external factory SpatialPosition(
-      JSArray<JSNumber> option); // [ JSNumberber, JSNumberber, JSNumberber ]
+      [JSArray<JSNumber> option]); // [ JSNumberber, JSNumberber, JSNumberber ]
 }
 
 extension type SpatialOrientation._(JSArray<JSNumber> _)
     implements JSArray<JSNumber> {
   external factory SpatialOrientation(
-      JSArray<JSNumber>
-          option); // [ JSNumberber, JSNumberber, JSNumberber, JSNumberber, JSNumberber, JSNumberber ]
+      [JSArray<JSNumber>
+          option]); // [ JSNumberber, JSNumberber, JSNumberber, JSNumberber, JSNumberber, JSNumberber ]
 }
 
 extension type SoundSpriteDefinitions._(JSObject _) implements JSObject {}
 
 extension type PannerAttributes._(JSObject _) implements JSObject {
   external factory PannerAttributes(
-      {JSNumber? coneInnerAngle,
-      JSNumber? coneOuterAngle,
-      JSNumber? coneOuterGain,
-      JSString? /* inverse | linear */ distanceModel,
-      JSNumber? maxDistance,
-      JSString? /* HRTF | equalpower */ panningModel,
-      JSNumber? refDistance,
-      JSNumber? rolloffFactor});
-  external JSNumber? get coneInnerAngle;
-  external set coneInnerAngle(JSNumber? value);
+      {num? coneInnerAngle,
+      num? coneOuterAngle,
+      num? coneOuterGain,
+      String? /* inverse | linear */ distanceModel,
+      num? maxDistance,
+      String? /* HRTF | equalpower */ panningModel,
+      num? refDistance,
+      num? rolloffFactor});
+  external num? get coneInnerAngle;
+  external set coneInnerAngle(num? value);
 
-  external JSNumber? get coneOuterAngle;
-  external set coneOuterAngle(JSNumber? value);
+  external num? get coneOuterAngle;
+  external set coneOuterAngle(num? value);
 
-  external JSNumber? get coneOuterGain;
-  external set coneOuterGain(JSNumber? value);
+  external num? get coneOuterGain;
+  external set coneOuterGain(num? value);
 
-  external JSString? get distanceModel;
-  external set distanceModel(JSString? value);
+  external String? get distanceModel;
+  external set distanceModel(String? value);
 
-  external JSNumber? get maxDistance;
-  external set maxDistance(JSNumber? value);
+  external num? get maxDistance;
+  external set maxDistance(num? value);
 
-  external JSString? get panningModel;
-  external set panningModel(JSString? value);
+  external String? get panningModel;
+  external set panningModel(String? value);
 
-  external JSNumber? get refDistance;
-  external set refDistance(JSNumber? value);
+  external num? get refDistance;
+  external set refDistance(num? value);
 
-  external JSNumber? get rolloffFactor;
-  external set rolloffFactor(JSNumber? value);
+  external num? get rolloffFactor;
+  external set rolloffFactor(num? value);
 }
 
 /// setup the sound object, which each node attached to a Howl group is contained in.
 extension type Sound._(JSObject _) implements JSObject {
-  external factory Sound(Howl howl);
+  external factory Sound([Howl howl]);
 
   /// Add new properties to the core Sound init.
-  /// @param  {Function} _super Core Sound init method.
   /// @return {Sound}
   external Sound init();
-
-  @JS('init')
-  // ignore: no_leading_underscores_for_local_identifiers
-  external Sound init_1(JSFunction _super);
 
   /// Create and setup a new sound object, whether HTML5 Audio or Web Audio.
   external Sound create();
 
   /// Reset the parameters of this sound to the original state (for recycle).
   /// Override the Sound.reset method to clean up properties from the spatial plugin.
-  ///  @param  {Function} _super Sound reset method.
   /// @return {Sound}
-  // ignore: no_leading_underscores_for_local_identifiers
   external Sound reset();
-  @JS('init')
-  // ignore: no_leading_underscores_for_local_identifiers
-  external Sound reset_1(JSFunction _super);
 }
 
 extension type XhrOptions._(JSObject _) implements JSObject {
@@ -177,17 +167,31 @@ extension type HowlListeners._(JSObject _) implements JSObject {
 extension type HowlOptions._(JSObject option) implements HowlListeners {
   external factory HowlOptions({
     required JSAny /* string | string[]*/ src,
-    JSNumber? volume,
+    num? volume,
     bool? html5,
     bool? loop,
-    JSAny preload,
+    JSAny preload, // boolean | 'metadata'
     bool? autoplay,
     bool? mute,
-    JSNumber? pool,
-    JSNumber? rate,
+    num? pool,
+    num? rate,
     JSAny? format, // string | string[]
     SoundSpriteDefinitions? sprite,
     XhrOptions? xhr,
+    SpatialOrientation? orientation,
+    num? stereo,
+    SpatialPosition? pos,
+    num? coneInnerAngle,
+    num? coneOuterAngle,
+    num? coneOuterGain,
+    String? /* inverse | linear */ distanceModel,
+    num? maxDistance,
+    String? /* HRTF | equalpower */ panningModel,
+    num? refDistance,
+    num? rolloffFactor,
+    JSExportedDartFunction? onstereo,
+    JSExportedDartFunction? onpos,
+    JSExportedDartFunction? onorientation,
     JSExportedDartFunction? onstop,
     JSExportedDartFunction? onpause,
     JSExportedDartFunction? onload,
@@ -212,8 +216,8 @@ extension type HowlOptions._(JSObject option) implements HowlListeners {
 
   /// The volume of the specific track, from 0.0 to 1.0.
   /// @default 1.0
-  external JSNumber? get volume;
-  external set volume(JSNumber? value);
+  external num? get volume;
+  external set volume(num? value);
 
   /// Set to true to force HTML5 Audio. This should be used for large audio files so that you don't
   /// have to wait for the full file to be downloaded and decoded before playing.
@@ -249,13 +253,13 @@ extension type HowlOptions._(JSObject option) implements HowlListeners {
   /// paused, it won't be removed from the pool and will still be considered active so that it can be
   /// resumed later.
   /// @default 5
-  external JSNumber? get pool;
-  external set pool(JSNumber? value);
+  external num? get pool;
+  external set pool(num? value);
 
   /// The rate of playback. 0.5 to 4.0, with 1.0 being normal speed.
   /// @default 1.0
-  external JSNumber? get rate;
-  external set rate(JSNumber? value);
+  external num? get rate;
+  external set rate(num? value);
 
   /// When using Web Audio, howler.js uses an XHR request to load the audio files. If you need to send
   /// custom headers, set the HTTP method or enable withCredentials (see reference), include them with
@@ -266,7 +270,7 @@ extension type HowlOptions._(JSObject option) implements HowlListeners {
 
   /// howler.js automatically detects your file format from the extension, but you may also specify a
   /// format in situations where extraction won't work (such as with a SoundCloud stream).
-  external JSAny? get format;
+  external JSAny? get format; // string | string[]
   external set format(JSAny? value);
 
   /// Define a sound sprite for the sound. The offset and duration are defined in milliseconds. A
@@ -284,55 +288,39 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   /// @return {Howl}
   external Howl init(HowlOptions o);
 
-  /// Add new properties to the core init.
-  /// @param  {Function} _super Core init method.
-  ///  @return {Howl}
-  @JS('init')
-  // ignore: no_leading_underscores_for_local_identifiers
-  external Howl init_1(JSFunction _super);
-
   /// .play() is not chainable; the other methods are
   /// Play a sound or resume previous playback.
   /// @param  {String/JSNumberber} sprite   Sprite name for sprite playback or sound id to continue previous.
   /// @param  {Boolean} internal Internal Use: true prevents event firing.
   /// @return {JSNumberber}          Sound ID.
-  external JSNumber? play();
-  @JS('play')
-  external JSNumber? play_1(
-      JSAny? /*string | JSNumberber  */ spriteOrId, bool? internal);
+  external num? play(
+      [JSAny? /*string | JSNumberber  */ spriteOrId, bool? internal]);
 
   /// Pause playback and save current position.
   ///  @param  {JSNumberber} id The sound ID (empty to pause all in group).
-  external Howl pause();
-  @JS('pause')
-  external Howl pause_1(JSNumber id);
+  external Howl pause([num id]);
 
   /// Stop playback and reset to start.
   ///  @param  {JSNumberber} id The sound ID (empty to stop all in group).
   ///  @param  {Boolean} internal Internal Use: true prevents event firing.
-  external Howl stop();
-  @JS('stop')
-  external Howl stop_1(JSNumber id);
+  external Howl stop([num id]);
 
   /// Mute/unmute a single sound or all sounds in this Howl group.
   /// @param  {Boolean} muted Set to true to mute and false to unmute.
   /// @param  {JSNumberber} id    The sound ID to update (omit to mute/unmute all).
-  external Howl mute(bool muted);
-  @JS('mute')
-  external Howl mute_1(bool muted, JSNumber id);
+  external Howl mute([bool muted, num id]);
 
   ///  Get/set the volume of this sound or of the Howl group. This method can optionally take 0, 1 or 2 arguments.
   ///   volume() -> Returns the group's volume value.
   ///   volume(id) -> Returns the sound id's current volume.
   ///   volume(vol) -> Sets the volume of all sounds in this Howl group.
   ///   volume(vol, id) -> Sets the volume of passed sound id.
-  external JSNumber volume();
+  external num volume();
   @JS('volume')
   external Howl volume_1(
-      JSNumber
-          idOrSetVolume); // First check if this is an ID, and if not, assume it is a new volume.
+      num idOrSetVolume); // First check if this is an ID, and if not, assume it is a new volume.
   @JS('volume')
-  external Howl volume_2(JSNumber volume, JSNumber id);
+  external Howl volume_2(num volume, num id);
 
   /// Fade a currently playing sound between two volumes (if no id is passed, all sounds will fade).
   /// @param  {JSNumberber} from The value to fade from (0.0 to 1.0).
@@ -340,20 +328,17 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   /// @param  {JSNumberber} len  Time in milliseconds to fade.
   /// @param  {JSNumberber} id   The sound id (omit to fade all sounds).
   ///
-  external Howl fade(JSNumber from, JSNumber to, JSNumber duration);
-  @JS('fade')
-  external Howl fade_1(
-      JSNumber from, JSNumber to, JSNumber duration, JSNumber id);
+  external Howl fade(num from, num to, num duration, [num id]);
 
   /// Get/set the playback rate of a sound. This method can optionally take 0, 1 or 2 arguments.
   /// rate() -> Returns the first sound node's current playback rate.
   /// rate(id) -> Returns the sound id's current playback rate.
   /// rate(rate) -> Sets the playback rate of all sounds in this Howl group.
   /// rate(rate, id) -> Sets the playback rate of passed sound id.
-  external JSNumber rate();
-  external Howl rate_1(JSNumber idOrRate);
+  external num rate();
+  external Howl rate_1(num idOrRate);
   @JS('rate')
-  external Howl rate_2(JSNumber rate, JSNumber id);
+  external Howl rate_2(num rate, num id);
 
   /// Get/set the seek position of a sound. This method can optionally take 0, 1 or 2 arguments.
   /// seek() -> Returns the first sound node's current seek position.
@@ -362,9 +347,9 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   /// seek(seek, id) -> Sets the seek position of passed sound id.
   external JSNumber seek();
   @JS('seek')
-  external Howl seek_1(JSNumber idOrSeek);
+  external Howl seek_1(num idOrSeek);
   @JS('seek')
-  external Howl seek_2(JSNumber seek, JSNumber id);
+  external Howl seek_2(num seek, num id);
 
   /// Get/set the loop parameter on a sound. This method can optionally take 0, 1 or 2 arguments.
   /// loop() -> Returns the group's loop value.
@@ -375,45 +360,38 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   @JS('loop')
   external Howl loop_1(bool loop);
   @JS('loop')
-  external Howl loop_2(JSNumber id);
+  external Howl loop_2(num id);
   @JS('loop')
-  external Howl loop_3(bool loop, JSNumber id);
+  external Howl loop_3(bool loop, num id);
 
   ///  Check if a specific sound is currently playing or not (if id is provided), or check if at least one of the sounds in the group is playing or not.
-  ///   @param  {JSNumberber}  id The sound id to check. If none is passed, the whole sound group is checked.
-  external bool
-      playing(); // Otherwise, loop through all sounds and check if any are playing.
-  external bool playing_1(JSNumber id); //  Check the passed sound ID (if any).
+  ///  @param  {JSNumberber}  id The sound id to check. If none is passed, the whole sound group is checked.
+  //    Otherwise, loop through all sounds and check if any are playing.
+  external bool playing([num id]); //  Check the passed sound ID (if any).
 
   /// Get the duration of this sound. Passing a sound id will return the sprite duration.
   /// @param  {JSNumberber} id The sound id to check. If none is passed, return full source duration.
   /// @return {JSNumberber} Audio duration in seconds.
-  @JS('duration')
-  external JSNumber duration();
-  external JSNumber duration_1(JSNumber id);
+  external num duration([num id]);
 
   /// Returns the current loaded state of this Howl.
   /// @return {String} 'unloaded', 'loading', 'loaded'
-  external JSString /* unloading | loading | loaded */ state();
+  external String /* unloading | loading | loaded */ state();
 
   /// Load the audio file.
   external Howl load();
 
   /// Unload and destroy the current Howl object.
   /// This will immediately stop all sound instances attached to this group.
-  external JSAny? /* null */ unload();
+  external void /* null */ unload();
 
   /// Get/set the stereo panning of the audio source for this sound or all in the group.
   /// @param  {Number} pan  A value of -1.0 is all the way left and 1.0 is all the way right.
   ///  @param  {Number} id (optional) The sound ID. If none is passed, all in group will be updated.
   /// @return {Howl/Number}    Returns self or the current stereo panning value.
-  external JSNumber stereo();
+  external num stereo();
   @JS('stereo')
-  external Howl stereo_1(
-    JSNumber pan,
-  );
-  @JS('stereo')
-  external Howl stereo_2(JSNumber pan, JSNumber? id);
+  external Howl stereo_1(num pan, [num id]);
 
   /// Get/set the 3D spatial position of the audio source for this sound or group relative to the global listener.
   /// @param  {Number} x  The x-position of the audio source.
@@ -423,9 +401,7 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   /// @return {Howl/Array}    Returns self or the current 3D spatial position: [x, y, z].
   external SpatialPosition pos();
   @JS('pos')
-  external Howl pos_1(JSNumber x, JSNumber y, JSNumber z);
-  @JS('pos')
-  external Howl pos_2(JSNumber x, JSNumber y, JSNumber z, JSNumber id);
+  external Howl pos_1(num x, num y, num z, [num id]);
 
   ///  Get/set the direction the listener is pointing in the 3D cartesian space.
   ///  A front and up vector must be provided. The front is the direction the
@@ -441,13 +417,7 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   /// @return {Howler/Array}     Returns self or the current orientation vectors.
   external SpatialOrientation orientation();
   @JS('orientation')
-  external Howl orientation_1(
-    JSNumber x,
-    JSNumber y,
-    JSNumber z,
-  );
-  @JS('orientation')
-  external Howl orientation_2(JSNumber x, JSNumber y, JSNumber z, JSNumber id);
+  external Howl orientation_1(num x, num y, num z, [num id]);
 
   /// Get/set the panner node's attributes for a sound or group of sounds.
   /// This method can optionall take 0, 1 or 2 arguments.
@@ -466,46 +436,31 @@ extension type Howl._(JSObject _) implements JSObject, EventTarget {
   ///   rolloffFactor - (1 by default) How quickly the volume reduces as source moves from listener. This is simply a variable of the distance model and can be in the range of `[0, 1]` with `linear` and `[0, ∞]` with `inverse` and `exponential`.
   ///   panningModel - ('HRTF' by default) Determines which spatialization algorithm is used to position audio. Can be `HRTF` or `equalpower`.
   /// @return {Howl/Object} Returns self or current panner attributes.
-  external PannerAttributes pannerAttr();
+  external PannerAttributes pannerAttr([num id]);
   @JS('pannerAttr')
-  external Howl pannerAttr_1(PannerAttributes attr);
-  @JS('pannerAttr')
-  external PannerAttributes pannerAttr_2(JSNumber id);
-  @JS('pannerAttr')
-  external Howl pannerAttr_3(PannerAttributes options, JSNumber id);
+  external Howl pannerAttr_1(PannerAttributes attr, [num id]);
 
   /// @param  {String}   event Event name. play | end | pause | stop | mute | volume | rate | seek | fade | unlock | loaderror | playerror | load
   /// @param  {Function} fn    Listener to call. () => void
   /// @param  {JSNumberber}   id    (optional) Only listen to events for this sound.
   /// @param  {JSNumberber}   once  (INTERNAL) Marks event to fire only once.
   ///
-  external Howl on(JSString event, JSExportedDartFunction callback);
-  @JS('on')
-  external Howl on_1(
-      JSString event, JSExportedDartFunction callback, JSNumber id);
-  @JS('on')
-  external Howl on_2(JSString event, JSExportedDartFunction callback,
-      JSNumber id, JSNumber once);
+  external Howl on(JSString event, JSExportedDartFunction callback,
+      [num id, num once]);
 
   /// @param  {String}   event Event name. play | end | pause | stop | mute | volume | rate | seek | fade | unlock | loaderror | playerror | load
   /// @param  {Function} fn    Listener to call. () => void
   /// @param  {JSNumberber}   id    (optional) Only listen to events for this sound.
   ///
-  external Howl once(JSString event, JSExportedDartFunction callback);
-  @JS('once')
-  external Howl once_1(
-      JSString event, JSExportedDartFunction callback, JSNumber id);
+  external Howl once(JSString event, JSExportedDartFunction callback, [num id]);
 
   /// @param  {String}   event Event name. play | end | pause | stop | mute | volume | rate | seek | fade | unlock | loaderror | playerror | load
   /// @param  {Function} fn    Listener to call. () => void
   /// @param  {JSNumberber}   id    (optional) Only listen to events for this sound.
   ///
-  external Howl off(
-      JSString event, JSExportedDartFunction callback, JSNumber? id);
+  external Howl off(JSString event, JSExportedDartFunction callback, [num id]);
   @JS('off')
-  external Howl off_1(JSString event, JSExportedDartFunction callback);
-  @JS('off')
-  external Howl off_2(JSString event, JSNumber id);
+  external Howl off_1(JSString event, num id);
 }
 
 extension type HowlerGlobal._(JSObject _) implements JSObject {
@@ -522,9 +477,9 @@ extension type HowlerGlobal._(JSObject _) implements JSObject {
   /// Get/set the global volume for all sounds.
   /// @param  {Float} vol Volume from 0.0 to 1.0.
   /// @return {Howler/Float}     Returns self or current volume.
-  external JSNumber volume();
+  external num volume();
   @JS('volume')
-  external HowlerGlobal volume_1(JSNumber volume);
+  external HowlerGlobal volume_1(num volume);
 
   /// Check for codec support of specific extension.
   /// @param  {String} ext Audio file extention.
@@ -537,8 +492,8 @@ extension type HowlerGlobal._(JSObject _) implements JSObject {
   external bool get usingWebAudio;
   external set usingWebAudio(bool value);
 
-  external JSNumber get htm5PoolSize;
-  external set html5PoolSize(JSNumber value);
+  external num get htm5PoolSize;
+  external set html5PoolSize(num value);
 
   external bool get noAudio;
   external set noAudio(bool value);
@@ -559,7 +514,7 @@ extension type HowlerGlobal._(JSObject _) implements JSObject {
   /// Future Howls will not use this value unless explicitly set.
   ///  @param  {Number} pan A value of -1.0 is all the way left and 1.0 is all the way right.
   ///  @return {Howler/Number}     Self or current stereo panning value.
-  external HowlerGlobal stereo(JSNumber pan);
+  external HowlerGlobal stereo(num pan);
 
   /// Get/set the position of the listener in 3D cartesian space. Sounds using
   /// 3D position will be relative to the listener's position.
@@ -570,7 +525,7 @@ extension type HowlerGlobal._(JSObject _) implements JSObject {
   external SpatialPosition pos();
   @JS('pos')
   external HowlerGlobal /* Howler | SpatialPosition */ pos_1(
-      JSNumber? x, JSNumber? y, JSNumber? z);
+      [num x, num y, num z]);
 
   ///  Get/set the direction the listener is pointing in the 3D cartesian space.
   ///  A front and up vector must be provided. The front is the direction the
@@ -585,8 +540,8 @@ extension type HowlerGlobal._(JSObject _) implements JSObject {
   /// @param  {Number} zUp The z-orientation of the top of the listener.
   /// @return {Howler/Array}     Returns self or the current orientation vectors.
   external SpatialOrientation orientation();
-  external HowlerGlobal orientation_1(JSNumber x, JSNumber? y, JSNumber? z,
-      JSNumber? xUp, JSNumber? yUp, JSNumber? zUp);
+  external HowlerGlobal orientation_1(
+      [num x, num y, num z, num xUp, num yUp, num zUp]);
 }
 
 /// global variable
@@ -616,4 +571,4 @@ external void setupAudioContext();
 /// @param  {Sound} sound Specific sound to setup panning on.
 /// @param {String} type Type of panner to create: 'stereo' or 'spatial'.
 @JS()
-external void setupPanner(Sound sound, JSString type);
+external void setupPanner(Sound sound, String type);
