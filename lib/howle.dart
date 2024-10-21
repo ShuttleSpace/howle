@@ -24,8 +24,6 @@ extension type SpatialOrientation._(JSArray<JSNumber> _)
           option]); // [ JSNumberber, JSNumberber, JSNumberber, JSNumberber, JSNumberber, JSNumberber ]
 }
 
-extension type SoundSpriteDefinitions._(JSObject _) implements JSObject {}
-
 extension type PannerAttributes._(JSObject _) implements JSObject {
   external factory PannerAttributes(
       {num? coneInnerAngle,
@@ -176,7 +174,7 @@ extension type HowlOptions._(JSObject option) implements HowlListeners {
     num? pool,
     num? rate,
     JSAny? format, // string | string[]
-    SoundSpriteDefinitions? sprite,
+    JSObject? sprite, // { k1: [1,2], k2: [1,2]}
     XhrOptions? xhr,
     SpatialOrientation? orientation,
     num? stereo,
@@ -276,8 +274,8 @@ extension type HowlOptions._(JSObject option) implements HowlListeners {
   /// Define a sound sprite for the sound. The offset and duration are defined in milliseconds. A
   /// third (optional) parameter is available to set a sprite as looping. An easy way to generate
   /// compatible sound sprites is with audiosprite.
-  external SoundSpriteDefinitions? get sprite;
-  external set sprite(SoundSpriteDefinitions? value);
+  external JSObject? get sprite; // { k1: [1,2], k2: [1,2]}
+  external set sprite(JSObject? value);
 }
 
 extension type Howl._(JSObject _) implements JSObject, EventTarget {
