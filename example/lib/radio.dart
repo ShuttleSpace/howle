@@ -30,6 +30,12 @@ class _RadioPageState extends State<RadioPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    radio.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,

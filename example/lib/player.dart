@@ -60,6 +60,12 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    player.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,

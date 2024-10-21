@@ -1,5 +1,6 @@
 import 'package:example/player.dart';
 import 'package:example/radio.dart';
+import 'package:example/sprite.dart';
 import 'package:example/three_d.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/player': (context) => const PlayerPage(),
         '/radio': (context) => const RadioPage(),
         '/3d': (context) => const ThreeDPage(),
+        '/sprite': (context) => const SpritePage(),
       },
     );
   }
