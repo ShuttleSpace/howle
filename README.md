@@ -18,7 +18,3 @@ Howl howl = Howl(HowlOptions(src: 'https://black_swan.mp3'.toJS));
 howl.play();
 howl.stop();
 ```
-
-### attention
-
-only support web platform!!!
