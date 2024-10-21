@@ -1,6 +1,5 @@
 import 'dart:js_interop';
 
-import 'package:example/player.dart';
 import 'package:flutter/material.dart';
 import 'package:howle/howle.dart';
 
@@ -110,22 +109,24 @@ class Radio {
           src: data.src.toJS, html5: true, format: ['mp3', 'aac'].jsify()));
       data.howl = sound;
     }
-    data.soundId = sound.play()?.toDartInt ?? 0;
     playlist = playlist.indexed.map<RadioDetail>((e) {
       if (e.$1 == index) {
         e.$2.isLiving = true;
+        e.$2.soundId = sound.play()?.toInt() ?? 0;
       } else {
         e.$2.isLiving = false;
+        stop(idx: e.$1);
       }
       return e.$2;
     }).toList();
     this.index = index;
   }
 
-  stop() {
-    var data = playlist[index];
+  stop({int? idx}) {
+    idx ??= index;
+    var data = playlist[idx];
     if (!data.isLiving) return;
-    playlist[index].isLiving = false;
-    data.howl?.unload();
+    playlist[idx].isLiving = false;
+    data.howl?.pause(data.soundId);
   }
 }

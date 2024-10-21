@@ -28,17 +28,35 @@ class _PlayerPageState extends State<PlayerPage> {
   void initState() {
     super.initState();
     player = Player(
-      playlist: [
-        SongDetail(title: 'Rave Digger', file: 'rave_digger', howl: null),
-        SongDetail(title: '80s Vibe', file: '80s_vibe', howl: null),
-        SongDetail(title: 'Running Out', file: 'running_out', howl: null),
-      ],
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant PlayerPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
+        playlist: [
+          SongDetail(title: 'Rave Digger', file: 'rave_digger', howl: null),
+          SongDetail(title: '80s Vibe', file: '80s_vibe', howl: null),
+          SongDetail(title: 'Running Out', file: 'running_out', howl: null),
+        ],
+        onplay: () {
+          setState(() {
+            isPlaying = true;
+          });
+          waveController.start();
+        },
+        onpause: () {
+          setState(() {
+            isPlaying = false;
+          });
+          waveController.stop();
+        },
+        onstop: () {
+          setState(() {
+            isPlaying = false;
+          });
+          waveController.stop();
+        },
+        onseek: () {
+          console.log('seek'.toJS);
+        },
+        onprogress: (progres) {
+          console.log('progress $progres'.toJS);
+        });
   }
 
   @override
@@ -119,15 +137,10 @@ class _PlayerPageState extends State<PlayerPage> {
                 IconButton(
                     onPressed: () {
                       if (isPlaying) {
-                        player.stop();
-                        waveController.stop();
+                        player.pause();
                       } else {
                         player.play();
-                        waveController.start();
                       }
-                      setState(() {
-                        isPlaying = !isPlaying;
-                      });
                     },
                     icon: Icon(
                         isPlaying ? Icons.pause_circle : Icons.play_circle)),
@@ -195,10 +208,19 @@ enum SkipDirection { next, prev }
 class Player {
   final List<SongDetail> playlist;
   int index = 0;
+  VoidCallback? onplay;
+  VoidCallback? onpause;
+  VoidCallback? onstop;
+  VoidCallback? onseek;
+  ValueChanged? onprogress;
 
-  Player({
-    required this.playlist,
-  });
+  Player(
+      {required this.playlist,
+      this.onplay,
+      this.onpause,
+      this.onstop,
+      this.onseek,
+      this.onprogress});
 
   String get trackTitle => '${index + 1}. ${playlist[index].title}';
   bool get playing => playlist.any((e) => e.howl?.playing() ?? e.playing);
@@ -206,7 +228,7 @@ class Player {
 
   play({int? index}) {
     var data = playlist[index ?? this.index];
-    if (data.playing || data.soundId != 0) {
+    if (data.playing) {
       console.log('already playing: ${data.toString()}'.toJS);
       return;
     }
@@ -219,23 +241,26 @@ class Player {
             'assets/player/audio/${data.file}.webm',
             'assets/player/audio/${data.file}.mp3'
           ].toList().jsify()!,
-          html5: true));
+          html5: true,
+          loop: true));
       sound
           .on(
             'play'.toJS,
             (() {
               data
-                ..duration = formatTime(sound.duration().toDartDouble.toInt())
+                ..duration = formatTime(sound.duration().toInt())
                 ..playing = true;
               console.log(
-                  'sound[onplay]: ${data.soundId} play, duration: ${formatTime(sound.duration().toDartDouble.toInt())}'
+                  'sound[onplay]: ${data.soundId} play, duration: ${formatTime(sound.duration().toInt())}'
                       .toJS);
+              onplay?.call();
             }).toJS,
           )
           .on(
             'seek'.toJS,
             (() {
               step();
+              onseek?.call();
             }).toJS,
           )
           .on(
@@ -243,17 +268,19 @@ class Player {
               (() {
                 data.playing = false;
                 console.log('sound[onpause]: ${data.soundId} pause'.toJS);
+                onpause?.call();
               }).toJS)
           .on(
               'stop'.toJS,
               (() {
                 data.playing = false;
                 console.log('sound[onstop]: ${data.soundId} stop'.toJS);
+                onstop?.call();
               }).toJS);
       data.howl = sound;
     }
 
-    data.soundId = sound.play()?.toDartInt ?? 0;
+    data.soundId = sound.play()?.toInt() ?? 0;
     console.log('[play] ${data.toString()}'.toJS);
     this.index = index ?? this.index;
   }
@@ -261,9 +288,9 @@ class Player {
   pause() {
     for (var e in playlist) {
       if (e.playing) {
-        e.howl?.pause_1(e.soundId.toJS);
+        e.howl?.pause(e.soundId);
         console.log(
-            'sound[pause]: ${e.soundId} ${e.title} isPlaying: ${e.howl?.playing_1(e.soundId.toJS)}'
+            'sound[pause]: ${e.soundId} ${e.title} isPlaying: ${e.howl?.playing(e.soundId)}'
                 .toJS);
       }
     }
@@ -272,9 +299,9 @@ class Player {
   stop() {
     for (var e in playlist) {
       if (e.playing) {
-        e.howl?.stop_1(e.soundId.toJS);
+        e.howl?.stop(e.soundId);
         console.log(
-            'sound[stop]: ${e.soundId} ${e.title} isPlaying: ${e.howl?.playing_1(e.soundId.toJS)}'
+            'sound[stop]: ${e.soundId} ${e.title} isPlaying: ${e.howl?.playing(e.soundId)}'
                 .toJS);
       }
     }
@@ -299,22 +326,21 @@ class Player {
   skipTo(int idx) {
     for (var e in playlist) {
       if (e.playing) {
-        e.howl?.stop_1(e.soundId.toJS);
+        e.howl?.stop(e.soundId);
       }
     }
     play(index: idx);
   }
 
   volume(double v) {
-    Howler.volume_1(v.toJS);
+    Howler.volume_1(v);
   }
 
   seek(double percent) {
     var sound = playlist[index].howl;
     if (sound != null) {
       if (sound.playing() == true) {
-        sound.seek_2((sound.duration().toDartDouble.toInt() * percent).toJS,
-            currentSoundId.toJS);
+        sound.seek_2((sound.duration().toInt() * percent), currentSoundId);
       }
     }
   }
@@ -324,7 +350,8 @@ class Player {
     if (sound != null) {
       var seek = sound.seek().toDartDouble.toInt();
       playlist[index].progress = formatTime(seek.round());
-      // var progres = (seek / sound.duration().toDartDouble.toInt()) * 100;
+      var progres = (seek / sound.duration().toInt()) * 100;
+      onprogress?.call(progres);
       if (sound.playing() == true) {
         scheduleMicrotask(step);
       }
