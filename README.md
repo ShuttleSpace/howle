@@ -14,7 +14,7 @@
 
 ```dart
 import 'package:howle/howle.dart';
-Howl howl = Howl(HowlOptions(src: 'https://hangf-1253488539.cos.ap-nanjing.myqcloud.com/sound/01.%20Black%20Swan.mp3'.toJS));
+Howl howl = Howl(HowlOptions(src: 'https://black_swan.mp3'.toJS));
 howl.play();
 howl.stop();
 ```
