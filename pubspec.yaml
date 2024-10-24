@@ -1,6 +1,6 @@
 name: howle
 description: "howler.js dart binding with dart:js_interop"
-version: 0.1.0
+version: 0.1.2
 homepage: "https://github.com/ShuttleSpace/howle"
 repository: "https://github.com/ShuttleSpace/howle"
 issue_tracker: "https://github.com/ShuttleSpace/howle/issues"
